@@ -107,21 +107,30 @@
 // export default AuthProvider;
 
 import { createContext, useEffect, useState } from 'react';
-import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
+import {
+    createUserWithEmailAndPassword,
+    getAuth,
+    GoogleAuthProvider,
+    onAuthStateChanged,
+    sendEmailVerification,
+    sendPasswordResetEmail,
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    signOut,
+    updateProfile
+} from 'firebase/auth';
 import { app } from '../firebase/firebase.config';
 import useAxiosPublic from '../hooks/UseAxiosPublic';
 
 export const AuthContext = createContext(null);
-
 const auth = getAuth(app);
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-
     const googleProvider = new GoogleAuthProvider();
     const axiosPublic = useAxiosPublic();
-    
+
     const createUser = async (email, password) => {
         setLoading(true);
         const result = await createUserWithEmailAndPassword(auth, email, password);
@@ -133,9 +142,19 @@ const AuthProvider = ({ children }) => {
         return sendEmailVerification(auth.currentUser);
     };
 
-    const signIn = (email, password) => {
+    const signIn = async (email, password) => {
         setLoading(true);
-        return signInWithEmailAndPassword(auth, email, password);
+        try {
+            const result = await signInWithEmailAndPassword(auth, email, password);
+            if (!result.user.emailVerified) {
+                await signOut(auth);
+                throw new Error('Please verify your email before logging in. Check your inbox for the verification link.');
+            }
+            return result;
+        } catch (error) {
+            setLoading(false);
+            throw error;
+        }
     };
 
     const googleSignIn = () => {

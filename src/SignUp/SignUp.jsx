@@ -1,375 +1,8 @@
 
 
-// import React, { useContext } from "react";
-// import { useForm } from "react-hook-form";
-// import { Link, useNavigate } from "react-router-dom";
-// import Swal from "sweetalert2";
-// import { AuthContext } from "../providers/AuthProvider";
-// import SocialLogin from "../components/SocialLogin";
-// import useAxiosPublic from "../hooks/UseAxiosPublic";
-
-// const SignUp = () => {
-//   const axiosPublic = useAxiosPublic();
-//   const { register, handleSubmit, reset, formState: { errors } } = useForm();
-//   const { createUser, updateUserProfile } = useContext(AuthContext);
-//   const navigate = useNavigate();
-
-//   const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
-//   const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
-
-//   const handleImageUpload = async (photo) => {
-//     const formData = new FormData();
-//     formData.append('image', photo);
-
-//     try {
-//       const res = await fetch(image_hosting_api, {
-//         method: 'POST',
-//         body: formData,
-//       });
-//       const imageData = await res.json();
-//       return imageData.success ? imageData.data.url : null;
-//     } catch (error) {
-//       console.error("Image Upload Error:", error);
-//       return null;
-//     }
-//   };
-
-//   const onSubmit = async (data) => {
-//     const photoURL = await handleImageUpload(data.photo[0]);
-//     if (!photoURL) return Swal.fire("Error", "Failed to upload image.", "error");
-
-//     try {
-//       const result = await createUser(data.email, data.password);
-//       const loggedUser = result.user;
-
-//       await updateUserProfile({ displayName: data.name, photoURL });
-
-//       const userInfo = {
-//         uid: loggedUser.uid,
-//         name: data.name,
-//         email: data.email,
-//         photoURL,
-//       };
-
-//       const res = await axiosPublic.post("/users", userInfo);
-
-//       if (res.data.insertedId) {
-//         reset();
-//         Swal.fire({
-//           position: "top-end",
-//           icon: "success",
-//           title: "Account Created Successfully",
-//           showConfirmButton: false,
-//           timer: 1500,
-//         });
-//         navigate("/");
-//       }
-//     } catch (error) {
-//       console.error("Signup Error:", error);
-//       Swal.fire("Error", error.message, "error");
-//     }
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-gradient-to-r from-blue-900 to-blue-700 flex items-center justify-center px-4">
-//       <div className="flex flex-col md:flex-row items-center gap-8 max-w-6xl w-full">
-        
-//         {/* Left Panel */}
-//         <div className="text-center md:text-left text-white max-w-md">
-//           <h1 className="text-4xl md:text-5xl font-bold mb-4">Welcome!</h1>
-//           <p className="mb-5 text-gray-200">
-//             Join us and explore a world of opportunities. Already have an account?
-//           </p>
-//           <Link
-//             to="/login"
-//             className="inline-block px-6 py-2 rounded-md border border-white text-white hover:bg-white hover:text-blue-800 transition duration-300"
-//           >
-//             Sign In
-//           </Link>
-//         </div>
-
-//         {/* Sign Up Form */}
-//         <div className="card w-full max-w-md bg-white shadow-xl rounded-lg">
-//           <form onSubmit={handleSubmit(onSubmit)} className="card-body p-6 space-y-4">
-//             <h2 className="text-2xl font-bold text-center text-blue-800">Create Account</h2>
-
-//             {/* Social Login */}
-//             <SocialLogin />
-//             <div className="divider text-gray-400 text-sm">or use your email</div>
-
-//             {/* Name */}
-//             <div className="form-control">
-//               <label className="label text-sm text-blue-800">Name</label>
-//               <input
-//                 type="text"
-//                 placeholder="Full Name"
-//                 {...register("name", { required: "Name is required" })}
-//                 className="input input-bordered bg-white border-blue-300 focus:ring-blue-500"
-//               />
-//               {errors.name && <span className="text-red-600 text-sm">{errors.name.message}</span>}
-//             </div>
-
-//             {/* Email */}
-//             <div className="form-control">
-//               <label className="label text-sm text-blue-800">Email</label>
-//               <input
-//                 type="email"
-//                 placeholder="Email"
-//                 {...register("email", { required: "Email is required" })}
-//                 className="input input-bordered bg-white border-blue-300 focus:ring-blue-500"
-//               />
-//               {errors.email && <span className="text-red-600 text-sm">{errors.email.message}</span>}
-//             </div>
-
-//             {/* Password */}
-//             <div className="form-control">
-//               <label className="label text-sm text-blue-800">Password</label>
-//               <input
-//                 type="password"
-//                 placeholder="Password"
-//                 {...register("password", {
-//                   required: "Password is required",
-//                   minLength: { value: 6, message: "Min 6 characters" },
-//                   maxLength: { value: 20, message: "Max 20 characters" },
-//                   pattern: {
-//                     value: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/,
-//                     message: "Must include uppercase, lowercase, number & symbol",
-//                   },
-//                 })}
-//                 className="input input-bordered bg-white border-blue-300 focus:ring-blue-500"
-//               />
-//               {errors.password && <span className="text-red-600 text-sm">{errors.password.message}</span>}
-//               <label className="label">
-//                 <Link to="/forgot-password" className="label-text-alt text-sm text-blue-600 hover:underline">
-//                   Forgot password?
-//                 </Link>
-//               </label>
-//             </div>
-
-//             {/* Photo */}
-//             <div className="form-control">
-//               <label className="label text-sm text-blue-800">Profile Photo</label>
-//               <input
-//                 type="file"
-//                 accept="image/*"
-//                 {...register("photo", { required: "Profile photo is required" })}
-//                 className="file-input file-input-bordered w-full bg-white border-blue-300"
-//               />
-//               {errors.photo && <span className="text-red-600 text-sm">{errors.photo.message}</span>}
-//             </div>
-
-//             {/* Submit */}
-//             <button type="submit" className="btn bg-blue-600 hover:bg-blue-700 text-white mt-2 w-full">
-//               Sign Up
-//             </button>
-
-//             {/* Redirect */}
-//             <p className="text-sm text-center text-gray-600">
-//               Already have an account?{" "}
-//               <Link to="/login" className="text-blue-600 hover:underline">Sign In</Link>
-//             </p>
-//           </form>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default SignUp;
-
-
-// import React, { useContext } from "react";
-// import { useForm } from "react-hook-form";
-// import { Link, useNavigate } from "react-router-dom";
-// import Swal from "sweetalert2";
-// import { AuthContext } from "../providers/AuthProvider";
-// import SocialLogin from "../components/SocialLogin";
-// import useAxiosPublic from "../hooks/UseAxiosPublic";
-
-// const SignUp = () => {
-//   const axiosPublic = useAxiosPublic();
-//   const { register, handleSubmit, reset, formState: { errors } } = useForm();
-//   const { createUser, updateUserProfile } = useContext(AuthContext);
-//   const navigate = useNavigate();
-
-//   const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
-//   const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
-
-//   const handleImageUpload = async (photo) => {
-//     if (!photo) return null;
-
-//     const formData = new FormData();
-//     formData.append("image", photo);
-
-//     try {
-//       const res = await fetch(image_hosting_api, {
-//         method: "POST",
-//         body: formData,
-//       });
-//       const imageData = await res.json();
-//       return imageData.success ? imageData.data.url : null;
-//     } catch (error) {
-//       console.error("Image Upload Error:", error);
-//       return null;
-//     }
-//   };
-
-//   const onSubmit = async (data) => {
-//     const photoFile = data.photo?.[0];
-//     const uploadedPhotoURL = await handleImageUpload(photoFile);
-
-//     try {
-//       const result = await createUser(data.email, data.password);
-//       const loggedUser = result.user;
-
-//       // await updateUserProfile({
-//       //   displayName: String(data.name || ""),
-//       //   photoURL: String(uploadedPhotoURL || ""),
-//       // });
-
-//       await updateUserProfile(
-//   String(data.name || ""),
-//   String(uploadedPhotoURL || "")
-// );
-
-
-//       const userInfo = {
-//         uid: loggedUser.uid,
-//         name: data.name,
-//         email: data.email,
-//         photoURL: uploadedPhotoURL || "",
-//       };
-
-//       const res = await axiosPublic.post("/users", userInfo);
-
-//       if (res.data.insertedId) {
-//         reset();
-//         Swal.fire({
-//           position: "top-end",
-//           icon: "success",
-//           title: "Account Created Successfully",
-//           showConfirmButton: false,
-//           timer: 1500,
-//         });
-//         navigate("/");
-//       }
-//     } catch (error) {
-//       console.error("Signup Error:", error);
-//       Swal.fire("Error", error.message, "error");
-//     }
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-gradient-to-r from-blue-900 to-blue-700 flex items-center justify-center px-4">
-//       <div className="flex flex-col md:flex-row items-center gap-8 max-w-6xl w-full">
-
-//         {/* Left Panel */}
-//         <div className="text-center md:text-left text-white max-w-md">
-//           <h1 className="text-4xl md:text-5xl font-bold mb-4">Welcome!</h1>
-//           <p className="mb-5 text-gray-200">
-//             Join us and explore a world of opportunities. Already have an account?
-//           </p>
-//           <Link
-//             to="/login"
-//             className="inline-block px-6 py-2 rounded-md border border-white text-white hover:bg-white hover:text-blue-800 transition duration-300"
-//           >
-//             Sign In
-//           </Link>
-//         </div>
-
-//         {/* Sign Up Form */}
-//         <div className="card w-full max-w-md bg-white shadow-xl rounded-lg">
-//           <form onSubmit={handleSubmit(onSubmit)} className="card-body p-6 space-y-4">
-//             <h2 className="text-2xl font-bold text-center text-blue-800">Create Account</h2>
-
-//             {/* Social Login */}
-//             <SocialLogin />
-//             <div className="divider text-gray-400 text-sm">or use your email</div>
-
-//             {/* Name */}
-//             <div className="form-control">
-//               <label className="label text-sm text-blue-800">Name</label>
-//               <input
-//                 type="text"
-//                 placeholder="Full Name"
-//                 {...register("name", { required: "Name is required" })}
-//                 className="input input-bordered bg-white border-blue-300 focus:ring-blue-500"
-//               />
-//               {errors.name && <span className="text-red-600 text-sm">{errors.name.message}</span>}
-//             </div>
-
-//             {/* Email */}
-//             <div className="form-control">
-//               <label className="label text-sm text-blue-800">Email</label>
-//               <input
-//                 type="email"
-//                 placeholder="Email"
-//                 {...register("email", { required: "Email is required" })}
-//                 className="input input-bordered bg-white border-blue-300 focus:ring-blue-500"
-//               />
-//               {errors.email && <span className="text-red-600 text-sm">{errors.email.message}</span>}
-//             </div>
-
-//             {/* Password */}
-//             <div className="form-control">
-//               <label className="label text-sm text-blue-800">Password</label>
-//               <input
-//                 type="password"
-//                 placeholder="Password"
-//                 {...register("password", {
-//                   required: "Password is required",
-//                   minLength: { value: 6, message: "Min 6 characters" },
-//                   maxLength: { value: 20, message: "Max 20 characters" },
-//                   pattern: {
-//                     value: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/,
-//                     message: "Must include uppercase, lowercase, number & symbol",
-//                   },
-//                 })}
-//                 className="input input-bordered bg-white border-blue-300 focus:ring-blue-500"
-//               />
-//               {errors.password && <span className="text-red-600 text-sm">{errors.password.message}</span>}
-//               <label className="label">
-//                 <Link to="/forgot-password" className="label-text-alt text-sm text-blue-600 hover:underline">
-//                   Forgot password?
-//                 </Link>
-//               </label>
-//             </div>
-
-//             {/* Photo (Optional) */}
-//             <div className="form-control">
-//               <label className="label text-sm text-blue-800">
-//                 Profile Photo <span className="text-gray-500">(optional)</span>
-//               </label>
-//               <input
-//                 type="file"
-//                 accept="image/*"
-//                 {...register("photo")}
-//                 className="file-input file-input-bordered w-full bg-white border-blue-300"
-//               />
-//             </div>
-
-//             {/* Submit */}
-//             <button type="submit" className="btn bg-blue-600 hover:bg-blue-700 text-white mt-2 w-full">
-//               Sign Up
-//             </button>
-
-//             {/* Redirect */}
-//             <p className="text-sm text-center text-gray-600">
-//               Already have an account?{" "}
-//               <Link to="/login" className="text-blue-600 hover:underline">Sign In</Link>
-//             </p>
-//           </form>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default SignUp;
-
-
 
 // import React, { useContext, useEffect, useState } from "react";
+
 // import { useForm } from "react-hook-form";
 // import { Link, useNavigate } from "react-router-dom";
 // import Swal from "sweetalert2";
@@ -377,10 +10,12 @@
 // import SocialLogin from "../components/SocialLogin";
 // import useAxiosPublic from "../hooks/UseAxiosPublic";
 // import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
+// import imge1 from '../assets/img-ln-Photoroom.png';
 
 // const SignUp = () => {
 //     const [disabled, setDisabled] = useState(true);
 //     const [termsAccepted, setTermsAccepted] = useState(false);
+//     const [showPassword, setShowPassword] = useState(false);
 //     const axiosPublic = useAxiosPublic();
 //     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 //     const { createUser, updateUserProfile } = useContext(AuthContext);
@@ -455,41 +90,60 @@
 //             }
 //         }
 
-//         createUser(data.email, data.password)
-//             .then(result => {
-//                 const loggedUser = result.user;
-//                 console.log("User Created:", loggedUser);
+//         try {
+//             const result = await createUser(data.email, data.password);
+//             console.log("User Created:", result.user);
 
-//                 updateUserProfile(data.name, photoURL)
-//                     .then(() => {
-//                         console.log("User profile info updated");
-//                         const userInfo = {
-//                             uid: loggedUser.uid,
-//                             name: data.name,
-//                             email: data.email,
-//                             photoURL: photoURL
-//                         };
+//             await updateUserProfile(data.name, photoURL);
+//             console.log("User profile info updated");
 
-//                         axiosPublic.post('/users', userInfo)
-//                             .then(res => {
-//                                 if (res.data.insertedId) {
-//                                     console.log("User added to the database");
-//                                     reset();
-//                                     Swal.fire({
-//                                         position: "top-end",
-//                                         icon: "success",
-//                                         title: "User Created Successfully",
-//                                         showConfirmButton: false,
-//                                         timer: 1500
-//                                     });
-//                                     navigate('/');
-//                                 }
-//                             })
-//                             .catch(error => console.log("Database Error:", error));
-//                     })
-//                     .catch(error => console.log("Profile Update Error:", error));
-//             })
-//             .catch(error => console.log("Create User Error:", error));
+//             const userInfo = {
+//                 uid: result.user.uid,
+//                 name: data.name,
+//                 email: data.email,
+//                 photoURL: photoURL,
+//                 emailVerified: false
+//             };
+
+//             try {
+//                 const res = await axiosPublic.post('/users', userInfo);
+//                 if (res.data.insertedId) {
+//                     console.log("User added to the database");
+//                     reset();
+                    
+//                     // Show success message with verification instructions
+//                     Swal.fire({
+//                         icon: 'success',
+//                         title: 'Account Created Successfully!',
+//                         html: `
+//                             <p>A verification email has been sent to <strong>${data.email}</strong></p>
+//                             <p class="mt-2">Please check your email and verify your account to continue.</p>
+//                         `,
+//                         showConfirmButton: true,
+//                         confirmButtonText: 'OK',
+//                         allowOutsideClick: false
+//                     }).then((result) => {
+//                         if (result.isConfirmed) {
+//                             navigate('/login');
+//                         }
+//                     });
+//                 }
+//             } catch (error) {
+//                 console.error("Database Error:", error);
+//                 Swal.fire({
+//                     icon: 'error',
+//                     title: 'Database Error',
+//                     text: 'Failed to save user information. Please try again.'
+//                 });
+//             }
+//         } catch (error) {
+//             console.error("Create User Error:", error);
+//             Swal.fire({
+//                 icon: 'error',
+//                 title: 'Sign Up Failed',
+//                 text: error.message
+//             });
+//         }
 //     };
 
 //     return (
@@ -499,10 +153,9 @@
 //                 <div className="max-w-lg">
 //                     <h2 className="text-4xl font-bold text-white mb-6">Join <span className="text-[#FCBB45]">LessonPaw</span> Today!</h2>
 //                     <p className="text-xl text-white/90">Connect with a community of educators and learners. Share knowledge, discover resources, and grow together.</p>
-//                     {/* You can add your illustration here */}
 //                     <div className="mt-8">
 //                         <img 
-//                             src="/path-to-your-illustration.svg" 
+//                             src={imge1} 
 //                             alt="Progress Illustration"
 //                             className="w-full max-w-md mx-auto"
 //                         />
@@ -514,7 +167,7 @@
 //             <div className="w-full lg:w-1/2 bg-white flex items-center justify-center p-6 overflow-y-auto">
 //                 <div className="w-full max-w-md space-y-8">
 //                     {/* Header */}
-//                     <div className="text-center">
+//                     <div className="text-center mt-8">
 //                         <h1 className="text-3xl font-bold text-[#005482] mb-2">Welcome!</h1>
 //                         <p className="text-gray-600">Create your account to get started</p>
 //                     </div>
@@ -587,22 +240,41 @@
 
 //                             {/* Password Input */}
 //                             <div>
-//                                 <input
-//                                     type="password"
-//                                     placeholder="Create password *"
-//                                     {...register("password", {
-//                                         required: "Password is required",
-//                                         minLength: {
-//                                             value: 6,
-//                                             message: "Password must be at least 6 characters"
-//                                         },
-//                                         pattern: {
-//                                             value: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/,
-//                                             message: "Password must include uppercase, lowercase, number and special character"
-//                                         }
-//                                     })}
-//                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#70C5D7] text-[#005482]"
-//                                 />
+//                                 <div className="relative">
+//                                     <input
+//                                         type={showPassword ? "text" : "password"}
+//                                         placeholder="Create password *"
+//                                         {...register("password", {
+//                                             required: "Password is required",
+//                                             minLength: {
+//                                                 value: 6,
+//                                                 message: "Password must be at least 6 characters"
+//                                             },
+//                                             pattern: {
+//                                                 value: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/,
+//                                                 message: "Password must include uppercase, lowercase, number and special character"
+//                                             }
+//                                         })}
+//                                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#70C5D7] text-[#005482]"
+//                                     />
+//                                     <button
+//                                         type="button"
+//                                         onClick={() => setShowPassword(!showPassword)}
+//                                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+//                                     >
+//                                         {showPassword ? (
+//                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+//                                                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+//                                                 <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+//                                             </svg>
+//                                         ) : (
+//                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+//                                                 <path fillRule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clipRule="evenodd" />
+//                                                 <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
+//                                             </svg>
+//                                         )}
+//                                     </button>
+//                                 </div>
 //                                 {errors.password && (
 //                                     <span className="text-[#DA3A60] text-sm mt-1">{errors.password.message}</span>
 //                                 )}
@@ -660,16 +332,6 @@
 //                             </svg>
 //                         </button>
 
-//                         {/* Divider */}
-//                         <div className="relative my-8">
-//                             <div className="absolute inset-0 flex items-center">
-//                                 <div className="w-full border-t border-gray-200"></div>
-//                             </div>
-//                             <div className="relative flex justify-center text-sm">
-//                                 <span className="px-4 bg-white text-gray-500 text-base">OR</span>
-//                             </div>
-//                         </div>
-
 //                         {/* Google Sign In */}
 //                         <SocialLogin />
 
@@ -691,7 +353,6 @@
 
 // export default SignUp;
 
-
 import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -700,6 +361,7 @@ import { AuthContext } from "../providers/AuthProvider";
 import SocialLogin from "../components/SocialLogin";
 import useAxiosPublic from "../hooks/UseAxiosPublic";
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
+import { getAuth, signOut } from 'firebase/auth';
 import imge1 from '../assets/img-ln-Photoroom.png';
 
 const SignUp = () => {
@@ -710,6 +372,7 @@ const SignUp = () => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const { createUser, updateUserProfile } = useContext(AuthContext);
     const navigate = useNavigate();
+    const auth = getAuth();
 
     const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
     const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -795,43 +458,42 @@ const SignUp = () => {
                 emailVerified: false
             };
 
-            try {
-                const res = await axiosPublic.post('/users', userInfo);
-                if (res.data.insertedId) {
-                    console.log("User added to the database");
-                    reset();
-                    
-                    // Show success message with verification instructions
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Account Created Successfully!',
-                        html: `
-                            <p>A verification email has been sent to <strong>${data.email}</strong></p>
-                            <p class="mt-2">Please check your email and verify your account to continue.</p>
-                        `,
-                        showConfirmButton: true,
-                        confirmButtonText: 'OK',
-                        allowOutsideClick: false
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            navigate('/login');
-                        }
-                    });
-                }
-            } catch (error) {
-                console.error("Database Error:", error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Database Error',
-                    text: 'Failed to save user information. Please try again.'
+            const res = await axiosPublic.post("/users", userInfo);
+
+            if (res.data.insertedId) {
+                reset();
+                await signOut(auth);
+                
+                await Swal.fire({
+                    title: 'Account Created Successfully!',
+                    html: `
+                        <div class="space-y-4">
+                            <div class="text-green-500">
+                                <svg class="mx-auto h-16 w-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <p class="text-gray-600">Please verify your email address:</p>
+                            <p class="font-semibold text-[#005482]">${data.email}</p>
+                            <p class="text-sm text-gray-500 mt-2">A verification link has been sent to your email. Please verify your email to activate your account.</p>
+                            <p class="text-sm text-gray-500">You cannot log in until your email is verified.</p>
+                        </div>
+                    `,
+                    icon: 'success',
+                    confirmButtonColor: '#DA3A60',
+                    confirmButtonText: 'Go to Login',
+                    allowOutsideClick: false
                 });
+
+                navigate("/login");
             }
         } catch (error) {
-            console.error("Create User Error:", error);
+            console.error("Signup Error:", error);
             Swal.fire({
                 icon: 'error',
-                title: 'Sign Up Failed',
-                text: error.message
+                title: 'Signup Failed',
+                text: error.message,
+                confirmButtonColor: '#DA3A60'
             });
         }
     };

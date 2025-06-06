@@ -74,7 +74,11 @@ const Banner = () => {
   }, [displayText, isDeleting, currentIndex, words, typingSpeed]);
 
   const handleJoinClick = () => {
-    navigate('/signup');
+    if (user) {
+      navigate('/dashboard');
+    } else {
+      navigate('/signup');
+    }
   };
 
   return (

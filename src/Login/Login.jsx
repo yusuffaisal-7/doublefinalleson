@@ -1,187 +1,5 @@
 
 
-// import React, { useEffect, useState, useRef, useContext } from 'react';
-// import { Link, useLocation, useNavigate } from 'react-router-dom';
-// import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
-// import Swal from 'sweetalert2';
-// import { AuthContext } from '../providers/AuthProvider';
-// import { useLanguage } from '../providers/LanguageProvider';
-// import SocialLogin from '../components/SocialLogin';
-// import bgImage from "../assets/Video.webm";
-
-// const Login = () => {
-//     const [disabled, setDisabled] = useState(true);
-//     const emailRef = useRef(null);
-//     const passwordRef = useRef(null);
-//     const { signIn } = useContext(AuthContext);
-//     const { translate } = useLanguage();
-//     const navigate = useNavigate();
-//     const location = useLocation();
-//     const from = location.state?.from?.pathname || "/";
-
-//     useEffect(() => {
-//         loadCaptchaEnginge(6);
-//     }, []);
-
-//     const handleLogin = (event) => {
-//         event.preventDefault();
-//         const form = event.target;
-//         const email = form.email.value;
-//         const password = form.password.value;
-
-//         signIn(email, password)
-//             .then((result) => {
-//                 Swal.fire({
-//                     title: translate('successLogin'),
-//                     icon: 'success',
-//                     showClass: { popup: 'animate__animated animate__fadeInDown' },
-//                     hideClass: { popup: 'animate__animated animate__fadeOutUp' },
-//                 });
-//                 navigate(from, { replace: true });
-//             })
-//             .catch((error) => {
-//                 Swal.fire({
-//                     title: translate('failedLogin'),
-//                     text: error.message,
-//                     icon: 'error',
-//                     confirmButtonText: translate('tryAgain'),
-//                 });
-//             });
-//     };
-
-//     const handleValidateCaptcha = (e) => {
-//         const captchaValue = e.target.value;
-//         if (validateCaptcha(captchaValue)) {
-//             setDisabled(false);
-//             Swal.fire({
-//                 icon: 'success',
-//                 title: 'Captcha Validated!',
-//                 showConfirmButton: false,
-//                 timer: 1500
-//             });
-//         } else {
-//             setDisabled(true);
-//             Swal.fire({
-//                 icon: 'error',
-//                 title: 'Invalid Captcha',
-//                 text: 'Please try again',
-//                 confirmButtonText: 'Ok'
-//             });
-//         }
-//     };
-
-//     return (
-//         <div className="h-screen w-screen overflow-hidden absolute top-0 left-0 flex items-center justify-center">
-//             {/* Background Video */}
-//             <video
-//                 autoPlay
-//                 loop
-//                 muted
-//                 playsInline
-//                 className="absolute inset-0 w-full h-full object-cover"
-//                 src={bgImage}
-//             />
-
-//             {/* Overlay and Decorative Elements */}
-//             <div className="absolute inset-0 bg-black bg-opacity-60"></div>
-//             <div className="absolute top-0 left-0 w-96 h-96 bg-teal-500 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
-//             <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
-
-//             {/* Main Container */}
-//             <div className="relative w-full max-w-4xl mx-4 flex flex-col md:flex-row backdrop-blur-md bg-gradient-to-br from-blue-800/50 to-teal-700/50 border border-white/20 shadow-2xl rounded-2xl overflow-hidden">
-//                 {/* Left Section - Welcome Message */}
-//                 <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-8 md:p-12 bg-gradient-to-b from-teal-600/30 to-transparent">
-//                     <h2 className="text-4xl font-bold text-center mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-teal-200 drop-shadow-lg">
-//                         {translate('welcomeBack')}
-//                     </h2>
-//                     <p className="text-center text-white/70 mt-4">
-//                         {translate('continueJourney')}
-//                     </p>
-//                 </div>
-
-//                 {/* Right Section - Login Form */}
-//                 <div className="w-full md:w-1/2 p-8 md:p-12 bg-white/10 backdrop-blur-lg">
-//                     <form onSubmit={handleLogin} className="space-y-6">
-//                         <div className="form-control">
-//                             <label className="text-sm font-medium text-white/90 mb-2">{translate('email')}</label>
-//                             <input
-//                                 ref={emailRef}
-//                                 type="email"
-//                                 name="email"
-//                                 placeholder={translate('enterEmail')}
-//                                 className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-teal-400"
-//                                 required
-//                             />
-//                         </div>
-
-//                         <div className="form-control">
-//                             <label className="text-sm font-medium text-white/90 mb-2">{translate('password')}</label>
-//                             <input
-//                                 ref={passwordRef}
-//                                 type="password"
-//                                 name="password"
-//                                 placeholder={translate('enterPassword')}
-//                                 className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-teal-400"
-//                                 required
-//                             />
-//                             <div className="flex justify-end mt-2">
-//                                 <Link className="text-sm text-teal-300 hover:text-teal-200 transition-colors">
-//                                     {translate('forgotPassword')}
-//                                 </Link>
-//                             </div>
-//                         </div>
-
-//                         <div className="form-control space-y-3">
-//                             <label className="block">
-//                                 <LoadCanvasTemplate />
-//                             </label>
-//                             <div className="flex gap-2">
-//                                 <input
-//                                     type="text"
-//                                     name="captcha"
-//                                     id="captcha"
-//                                     placeholder={translate('captchaText')}
-//                                     className="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-teal-400"
-//                                     required
-//                                 />
-//                                 <button
-//                                     type="button"
-//                                     onClick={() => handleValidateCaptcha({ target: document.getElementById('captcha') })}
-//                                     className="px-6 py-3 bg-[#DA3A60] hover:bg-[#DA3A60]/90 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
-//                                 >
-//                                     {translate('validate')}
-//                                 </button>
-//                             </div>
-//                         </div>
-
-//                         <button
-//                             type="submit"
-//                             disabled={disabled}
-//                             className="w-full py-3 px-6 bg-[#DA3A60] hover:bg-[#DA3A60]/90 text-white font-medium rounded-lg shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-//                         >
-//                             {translate('login')}
-//                         </button>
-//                     </form>
-
-//                     {/* Social Login Section */}
-//                     <div className="mt-6">
-//                         <SocialLogin />
-//                     </div>
-
-//                     {/* Sign Up Link */}
-//                     <p className="text-center mt-8 text-white/70">
-//                         {translate('newToSite')}{' '}
-//                         <Link to="/signup" className="text-teal-300 hover:text-teal-200 font-medium transition-colors">
-//                             {translate('createAccount')}
-//                         </Link>
-//                     </p>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default Login;
 
 // import React, { useEffect, useState, useRef, useContext } from 'react';
 // import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -190,10 +8,12 @@
 // import { AuthContext } from '../providers/AuthProvider';
 // import { useLanguage } from '../providers/LanguageProvider';
 // import SocialLogin from '../components/SocialLogin';
+// import imge1 from '../assets/img-signup-PhotoRoom.png';
 
 // const Login = () => {
 //     const [disabled, setDisabled] = useState(true);
 //     const [termsAccepted, setTermsAccepted] = useState(false);
+//     const [showPassword, setShowPassword] = useState(false);
 //     const emailRef = useRef(null);
 //     const passwordRef = useRef(null);
 //     const { signIn } = useContext(AuthContext);
@@ -225,6 +45,34 @@
 
 //         signIn(email, password)
 //             .then((result) => {
+//                 const user = result.user;
+                
+//                 if (!user.emailVerified) {
+//                     Swal.fire({
+//                         title: 'Email Not Verified',
+//                         html: `
+//                             <p>Please verify your email address first.</p>
+//                             <p class="mt-2">Check your inbox for the verification email.</p>
+//                             <p class="mt-2">Didn't receive the email? Click below to resend.</p>
+//                         `,
+//                         icon: 'warning',
+//                         showCancelButton: true,
+//                         confirmButtonText: 'Resend Email',
+//                         cancelButtonText: 'Close'
+//                     }).then((result) => {
+//                         if (result.isConfirmed) {
+//                             verifyEmail().then(() => {
+//                                 Swal.fire({
+//                                     icon: 'success',
+//                                     title: 'Verification Email Sent',
+//                                     text: 'Please check your inbox and verify your email.'
+//                                 });
+//                             });
+//                         }
+//                     });
+//                     return;
+//                 }
+
 //                 Swal.fire({
 //                     title: translate('successLogin'),
 //                     icon: 'success',
@@ -271,10 +119,9 @@
 //                 <div className="max-w-lg">
 //                     <h2 className="text-4xl font-bold text-white mb-6">Yes! we're making progress</h2>
 //                     <p className="text-xl text-white/90">every minute & every second</p>
-//                     {/* You can add your illustration here */}
 //                     <div className="mt-8">
 //                         <img 
-//                             src="/path-to-your-illustration.svg" 
+//                             src={imge1} 
 //                             alt="Progress Illustration"
 //                             className="w-full max-w-md mx-auto"
 //                         />
@@ -305,14 +152,33 @@
 //                                 />
 //                             </div>
 //                             <div>
-//                                 <input
-//                                     ref={passwordRef}
-//                                     type="password"
-//                                     name="password"
-//                                     placeholder="Enter password *"
-//                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#70C5D7] text-[#005482]"
-//                                     required
-//                                 />
+//                                 <div className="relative">
+//                                     <input
+//                                         ref={passwordRef}
+//                                         type={showPassword ? "text" : "password"}
+//                                         name="password"
+//                                         placeholder="Enter password *"
+//                                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#70C5D7] text-[#005482]"
+//                                         required
+//                                     />
+//                                     <button
+//                                         type="button"
+//                                         onClick={() => setShowPassword(!showPassword)}
+//                                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+//                                     >
+//                                         {showPassword ? (
+//                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+//                                                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+//                                                 <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+//                                             </svg>
+//                                         ) : (
+//                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+//                                                 <path fillRule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clipRule="evenodd" />
+//                                                 <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
+//                                             </svg>
+//                                         )}
+//                                     </button>
+//                                 </div>
 //                             </div>
                             
 //                             {/* Captcha Section */}
@@ -367,16 +233,6 @@
 //                             </svg>
 //                         </button>
 
-//                         {/* Single Divider with OR */}
-//                         <div className="relative my-8">
-//                             <div className="absolute inset-0 flex items-center">
-//                                 <div className="w-full border-t border-gray-200"></div>
-//                             </div>
-//                             <div className="relative flex justify-center text-sm">
-//                                 <span className="px-4 bg-white text-gray-500 text-base">OR</span>
-//                             </div>
-//                         </div>
-
 //                         {/* Google Sign In */}
 //                         <SocialLogin />
 
@@ -397,7 +253,6 @@
 // };
 
 // export default Login;
-
 
 import React, { useEffect, useState, useRef, useContext } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -443,34 +298,6 @@ const Login = () => {
 
         signIn(email, password)
             .then((result) => {
-                const user = result.user;
-                
-                if (!user.emailVerified) {
-                    Swal.fire({
-                        title: 'Email Not Verified',
-                        html: `
-                            <p>Please verify your email address first.</p>
-                            <p class="mt-2">Check your inbox for the verification email.</p>
-                            <p class="mt-2">Didn't receive the email? Click below to resend.</p>
-                        `,
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Resend Email',
-                        cancelButtonText: 'Close'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            verifyEmail().then(() => {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Verification Email Sent',
-                                    text: 'Please check your inbox and verify your email.'
-                                });
-                            });
-                        }
-                    });
-                    return;
-                }
-
                 Swal.fire({
                     title: translate('successLogin'),
                     icon: 'success',
@@ -480,11 +307,16 @@ const Login = () => {
                 navigate(from, { replace: true });
             })
             .catch((error) => {
+                let errorMessage = error.message;
+                if (error.message.includes('email-verification')) {
+                    errorMessage = 'Please verify your email before logging in. Check your inbox for the verification link.';
+                }
                 Swal.fire({
-                    title: translate('failedLogin'),
-                    text: error.message,
+                    title: 'Login Failed',
+                    text: errorMessage,
                     icon: 'error',
-                    confirmButtonText: translate('tryAgain'),
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#DA3A60'
                 });
             });
     };

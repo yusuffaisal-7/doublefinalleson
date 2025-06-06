@@ -1,3 +1,6 @@
+
+
+
 // import React from 'react';
 // import { motion } from 'framer-motion';
 // import { 
@@ -5,35 +8,42 @@
 //   FaCertificate, FaClock, FaHandshake, FaGraduationCap, FaLaptop, FaChartLine 
 // } from 'react-icons/fa';
 // import { Link } from 'react-router-dom';
+// import { useLanguage } from '../../providers/LanguageProvider';
+// import imgg1 from '../../assets/Become.jpg';
+// import imgg2 from '../../assets/FindTeacher.jpg';
+// import imgg3 from '../../assets/Become2.jpg';
+// import imgg4 from '../../assets/Become3.jpg';
 
 // const BecomeTeacherGuide = () => {
+//   const { translate } = useLanguage();
+
 //   const steps = [
 //     {
 //       icon: <FaUserPlus className="text-4xl text-[#DA3A60]" />,
-//       title: "Build Your Profile",
-//       description: "Create a compelling teaching profile showcasing your expertise, teaching methodology, and professional achievements.",
-//       image: "https://res.cloudinary.com/duh7c5x99/image/upload/v1748764924/ChatGPT_Image_Jun_1_2025_at_02_01_14_PM_cdggww.png",
+//       title: translate('buildProfile'),
+//       description: translate('buildProfileDesc'),
+//       image: imgg1,
 //       animation: { x: [-100, 0], opacity: [0, 1] }
 //     },
 //     {
 //       icon: <FaClipboardCheck className="text-4xl text-[#70C5D7]" />,
-//       title: "Quality Verification",
-//       description: "Our thorough verification process ensures high teaching standards. Submit your credentials and teaching certifications.",
-//       image: "https://res.cloudinary.com/duh7c5x99/image/upload/v1748760517/ChatGPT_Image_Jun_1_2025_at_12_47_04_PM_cray1l.png",
+//       title: translate('qualityVerification'),
+//       description: translate('qualityVerificationDesc'),
+//       image: imgg2,
 //       animation: { y: [100, 0], opacity: [0, 1] }
 //     },
 //     {
 //       icon: <FaChalkboardTeacher className="text-4xl text-[#FCBB45]" />,
-//       title: "Customize Your Teaching",
-//       description: "Set your teaching preferences, rates, and availability. Choose between online and in-person instruction options.",
-//       image: "https://res.cloudinary.com/duh7c5x99/image/upload/v1748720655/M127_Online_Course_Illustrations_on_Yellow_Images_Creative_Store_-_65779_f0flir.jpg",
+//       title: translate('customizeTeaching'),
+//       description: translate('customizeTeachingDesc'),
+//       image: imgg3,
 //       animation: { x: [100, 0], opacity: [0, 1] }
 //     },
 //     {
 //       icon: <FaMoneyBillWave className="text-4xl text-[#DA3A60]" />,
-//       title: "Start Your Journey",
-//       description: "Connect with students, deliver engaging lessons, and grow your teaching business on our platform.",
-//       image: "https://res.cloudinary.com/duh7c5x99/image/upload/v1748720384/Career_growth_growing_business_or_leadership_to_overcome_challenge_motivation_to_succeed_career_development_or_ambition_to_success_concept_confidence_businesswoman_walking_up_growth_arrow_stair__alrvof.jpg",
+//       title: translate('startJourney'),
+//       description: translate('startJourneyDesc'),
+//       image: imgg4,
 //       animation: { y: [-100, 0], opacity: [0, 1] }
 //     }
 //   ];
@@ -41,36 +51,36 @@
 //   const benefits = [
 //     {
 //       icon: <FaCertificate className="text-[#DA3A60]" />,
-//       title: "Professional Growth",
-//       description: "Access professional development resources and build your teaching portfolio"
+//       title: translate('professionalGrowth'),
+//       description: translate('professionalGrowthDesc')
 //     },
 //     {
 //       icon: <FaLaptop className="text-[#70C5D7]" />,
-//       title: "Teaching Tools",
-//       description: "Utilize our advanced teaching platform and resources"
+//       title: translate('teachingTools'),
+//       description: translate('teachingToolsDesc')
 //     },
 //     {
 //       icon: <FaChartLine className="text-[#FCBB45]" />,
-//       title: "Career Development",
-//       description: "Expand your reach and grow your teaching career"
+//       title: translate('careerDevelopment'),
+//       description: translate('careerDevelopmentDesc')
 //     }
 //   ];
 
 //   const features = [
 //     {
-//       title: "Flexible Schedule",
+//       title: translate('flexibleSchedule'),
 //       value: "100%",
-//       description: "Work on your own terms"
+//       description: translate('flexibleScheduleDesc')
 //     },
 //     {
-//       title: "Platform Support",
+//       title: translate('platformSupport'),
 //       value: "24/7",
-//       description: "Always here to help"
+//       description: translate('platformSupportDesc')
 //     },
 //     {
-//       title: "Earning Potential",
+//       title: translate('earningPotential'),
 //       value: "$50+/hr",
-//       description: "Set your own rates"
+//       description: translate('earningPotentialDesc')
 //     }
 //   ];
 
@@ -98,10 +108,10 @@
 //               className="mb-12"
 //             >
 //               <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-[#005482] via-[#70C5D7] to-[#DA3A60] text-transparent bg-clip-text">
-//                 Become an Expert Teacher
+//                 {translate('becomeExpertTeacher')}
 //               </h1>
 //               <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-//                 Share your knowledge, inspire students, and build a rewarding teaching career on our platform
+//                 {translate('becomeTeacherDesc')}
 //               </p>
 //             </motion.div>
 
@@ -133,7 +143,7 @@
 //             viewport={{ once: true }}
 //             className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-[#005482] via-[#70C5D7] to-[#DA3A60] text-transparent bg-clip-text"
 //           >
-//             Your Teaching Journey Begins Here
+//             {translate('teachingJourneyBegins')}
 //           </motion.h2>
 //           <div className="w-24 h-1 bg-gradient-to-r from-[#005482] to-[#70C5D7] mx-auto rounded-full"></div>
 //         </div>
@@ -162,7 +172,7 @@
 //                   <img
 //                     src={step.image}
 //                     alt={step.title}
-//                     className="relative rounded-lg shadow-2xl w-full h-[300px] object-cover transform group-hover:scale-[1.02] transition duration-500"
+//                     className="relative rounded-lg shadow-2xl w-full transform group-hover:scale-[1.02] transition duration-500"
 //                   />
 //                 </div>
 //               </div>
@@ -186,7 +196,7 @@
 //               viewport={{ once: true }}
 //               className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-[#005482] via-[#70C5D7] to-[#DA3A60] text-transparent bg-clip-text"
 //             >
-//               Benefits of Teaching With Us
+//               {translate('teachingBenefits')}
 //             </motion.h2>
 //             <div className="w-24 h-1 bg-gradient-to-r from-[#005482] to-[#70C5D7] mx-auto rounded-full"></div>
 //           </div>
@@ -221,23 +231,23 @@
 //         <div className="absolute inset-0 bg-gradient-to-r from-[#005482] to-[#70C5D7]"></div>
 //         <div className="relative max-w-4xl mx-auto text-center py-24 px-6">
 //           <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
-//             Ready to Start Your Teaching Journey?
+//             {translate('readyToTeach')}
 //           </h2>
 //           <p className="text-xl text-white/90 mb-12 leading-relaxed">
-//             Join our community of passionate educators and make a difference in students' lives
+//             {translate('joinTeacherCommunity')}
 //           </p>
 //           <div className="flex flex-col md:flex-row gap-6 justify-center">
 //             <Link 
 //               to="/signup"
 //               className="px-8 py-4 bg-[#DA3A60] text-white rounded-full text-lg font-semibold hover:bg-[#c43255] transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
 //             >
-//               Apply as a Teacher
+//               {translate('applyAsTeacher')}
 //             </Link>
 //             <Link 
 //               to="/about"
 //               className="px-8 py-4 bg-white text-[#005482] rounded-full text-lg font-semibold hover:bg-gray-50 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
 //             >
-//               Learn More About Teaching
+//               {translate('learnMoreTeaching')}
 //             </Link>
 //           </div>
 //         </div>
@@ -249,14 +259,15 @@
 // export default BecomeTeacherGuide; 
 
 
-import React from 'react';
+import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 import { 
   FaUserPlus, FaClipboardCheck, FaChalkboardTeacher, FaMoneyBillWave, 
   FaCertificate, FaClock, FaHandshake, FaGraduationCap, FaLaptop, FaChartLine 
 } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../providers/LanguageProvider';
+import { AuthContext } from '../../providers/AuthProvider';
 import imgg1 from '../../assets/Become.jpg';
 import imgg2 from '../../assets/FindTeacher.jpg';
 import imgg3 from '../../assets/Become2.jpg';
@@ -264,6 +275,16 @@ import imgg4 from '../../assets/Become3.jpg';
 
 const BecomeTeacherGuide = () => {
   const { translate } = useLanguage();
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleApplyTeacher = () => {
+    if (user) {
+      navigate('/dashboard/joinTeacher');
+    } else {
+      navigate('/login');
+    }
+  };
 
   const steps = [
     {
@@ -485,12 +506,12 @@ const BecomeTeacherGuide = () => {
             {translate('joinTeacherCommunity')}
           </p>
           <div className="flex flex-col md:flex-row gap-6 justify-center">
-            <Link 
-              to="/signup"
+            <button 
+              onClick={handleApplyTeacher}
               className="px-8 py-4 bg-[#DA3A60] text-white rounded-full text-lg font-semibold hover:bg-[#c43255] transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               {translate('applyAsTeacher')}
-            </Link>
+            </button>
             <Link 
               to="/about"
               className="px-8 py-4 bg-white text-[#005482] rounded-full text-lg font-semibold hover:bg-gray-50 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"

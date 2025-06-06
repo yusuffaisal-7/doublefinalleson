@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useContext } from 'react';
 
 // Create and export the context
@@ -13,13 +12,13 @@ const languages = {
       // Navigation & Common
       home: 'Home',
       about: 'About Us',
-      blog: 'Blogs',
+      blog: 'Resources',
       dashboard: 'Dashboard',
       login: 'Login',
       signup: 'Sign Up',
       resources: 'Resources',
-      findTeacher: 'Find a Teacher Guide',
-      becomeTeacher: 'Become a Teacher Guide',
+      findTeacher: 'Find a Teacher',
+      becomeTeacher: 'Become a Teacher',
       logout: 'Logout',
       contact: 'Contact',
       
@@ -339,7 +338,7 @@ const languages = {
       // Navigation & Common
       home: 'Inicio',
       about: 'Sobre Nosotros',
-      blog: 'Blogs',
+      blog: 'Recursos',
       dashboard: 'Panel de Control',
       login: 'Iniciar Sesión',
       signup: 'Registrarse',
@@ -665,11 +664,11 @@ const languages = {
     translations: {
       // Navigation & Common
       home: 'Accueil',
-      about: 'À Propos',
-      blog: 'Blogs',
+      about: 'À Propos de Nous',
+      blog: 'Ressources',
       dashboard: 'Tableau de Bord',
       login: 'Connexion',
-      signup: "S'inscrire",
+      signup: 'Inscription',
       resources: 'Ressources',
       findTeacher: 'Trouver un Professeur',
       becomeTeacher: 'Devenir Professeur',
@@ -991,9 +990,9 @@ const languages = {
     translations: {
       // Navigation & Common
       home: 'Akèy',
-      about: 'Sou Nou',
-      blog: 'Blog',
-      dashboard: 'Tablo',
+      about: 'Apropo de Nou',
+      blog: 'Resous',
+      dashboard: 'Tablo de Bò',
       login: 'Konekte',
       signup: 'Enskri',
       resources: 'Resous',
@@ -1344,4 +1343,4 @@ export const useLanguage = () => {
   return context;
 };
 
-export default LanguageProvider;
+export default LanguageProvider; 
