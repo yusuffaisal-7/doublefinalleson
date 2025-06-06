@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 import { FaSearch, FaUserCheck, FaCalendarCheck, FaComments, FaStar, FaGraduationCap, FaChalkboardTeacher, FaLaptop, FaUsers } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../providers/LanguageProvider';
+import { AuthContext } from '../../providers/AuthProvider';
 import img1 from "../../assets/FindTeacher3.jpg";
 import img2 from "../../assets/FindTeacher.jpg";
 import img3 from "../../assets/FindTeacher2.jpg";
@@ -10,6 +11,14 @@ import img4 from "../../assets/FindTeacher4.jpg";
 
 const FindTeacherGuide = () => {
   const { translate } = useLanguage();
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleStartLearning = () => {
+    if (!user) {
+      navigate('/signup');
+    }
+  };
 
   const steps = [
     {
@@ -190,36 +199,38 @@ const FindTeacherGuide = () => {
       </motion.div>
 
       {/* Enhanced CTA Section */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        className="relative overflow-hidden"
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-[#005482] to-[#70C5D7]"></div>
-        <div className="relative max-w-4xl mx-auto text-center py-24 px-6">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
-            {translate('readyToTransform')}
-          </h2>
-          <p className="text-xl text-white/90 mb-12 leading-relaxed">
-            {translate('joinThousands')}
-          </p>
-          <div className="flex flex-col md:flex-row gap-6 justify-center">
-            <Link 
-              to="/signup"
-              className="px-8 py-4 bg-[#DA3A60] text-white rounded-full text-lg font-semibold hover:bg-[#c43255] transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-            >
-              {translate('startLearningToday')}
-            </Link>
-            <Link 
-              to="/about"
-              className="px-8 py-4 bg-white text-[#005482] rounded-full text-lg font-semibold hover:bg-gray-50 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-            >
-              {translate('learnMoreAboutUs')}
-            </Link>
+      {!user && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="relative overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-[#005482] to-[#70C5D7]"></div>
+          <div className="relative max-w-4xl mx-auto text-center py-24 px-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
+              {translate('readyToTransform')}
+            </h2>
+            <p className="text-xl text-white/90 mb-12 leading-relaxed">
+              {translate('joinThousands')}
+            </p>
+            <div className="flex flex-col md:flex-row gap-6 justify-center">
+              <button 
+                onClick={handleStartLearning}
+                className="px-8 py-4 bg-[#DA3A60] text-white rounded-full text-lg font-semibold hover:bg-[#c43255] transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+              >
+                {translate('startLearningToday')}
+              </button>
+              <Link 
+                to="/about"
+                className="px-8 py-4 bg-white text-[#005482] rounded-full text-lg font-semibold hover:bg-gray-50 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+              >
+                {translate('learnMoreAboutUs')}
+              </Link>
+            </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      )}
     </div>
   );
 };
