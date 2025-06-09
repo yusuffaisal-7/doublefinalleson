@@ -393,6 +393,7 @@ const Dashboard = () => {
                     {renderNavLink("/dashboard/manageStory", <FaEdit className="text-xl" />, translate('manageStory'))}
                     {renderNavLink("/dashboard/addBlog", <FaEdit className="text-xl" />, translate('addBlog'))}
                     {renderNavLink("/dashboard/editBlog", <FaBook className="text-xl" />, translate('editBlog'))}
+                    {renderNavLink("/dashboard/confirmation", <FaBook className="text-xl" />, translate('confirmation'))}
                   </>
                 )}
               </nav>

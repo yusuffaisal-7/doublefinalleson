@@ -342,6 +342,7 @@ import FindTeacherGuide from "../pages/FindTeacherGuide/FindTeacherGuide";
 import BecomeTeacherGuide from "../pages/BecomeTeacherGuide/BecomeTeacherGuide";
 import Contact from "../pages/Contact";
 import NotFound from "../pages/NotFound/NotFound";
+import Confirmation from "../pages/Confirmation/Confirmation";
 
 // Custom wrapper to restrict routes to admins
 const AdminRoute = ({ children }) => {
@@ -574,6 +575,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <Notifications />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "confirmation",
+        element: (
+          <AdminRoute>
+            <Confirmation></Confirmation>
           </AdminRoute>
         ),
       },
