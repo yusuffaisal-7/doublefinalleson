@@ -21,7 +21,6 @@ const TeacherDetails = () => {
   const [hasUserRated, setHasUserRated] = useState(false);
   const [hasPaidForTutor, setHasPaidForTutor] = useState(false);
   const [hasConfirmedService, setHasConfirmedService] = useState(false);
-  const [availableRatings, setAvailableRatings] = useState(0);
 
   const { data: tutor, isLoading: tutorLoading, error: tutorError } = useQuery({
     queryKey: ['tutor', tutorId],
@@ -37,13 +36,11 @@ const TeacherDetails = () => {
     queryFn: async () => {
       const res = await axiosSecure.get(`/ratings/${tutorId}`);
       if (user) {
-        const userRatings = res.data.filter(rating => rating.studentEmail === user.email);
-        setHasUserRated(userRatings.length >= (payments?.length || 0));
-        setAvailableRatings((payments?.length || 0) - userRatings.length);
+        const hasRated = res.data.some(rating => rating.studentEmail === user.email);
+        setHasUserRated(hasRated);
       }
       return res.data;
     },
-    enabled: !!tutorId && !!payments
   });
 
   const { data: payments, isLoading: paymentsLoading, error: paymentsError } = useQuery({
@@ -558,20 +555,18 @@ const TeacherDetails = () => {
               </div>
 
               {/* Add Rating Form */}
-              {user && availableRatings > 0 ? (
+              {user && !hasUserRated ? (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mb-8 p-6 bg-[#70C5D7]/5 rounded-xl"
                 >
-                  <h3 className="text-xl font-bold text-[#005482] mb-4">
-                    Rate this Tutor {availableRatings > 1 ? `(${availableRatings} ratings available)` : ''}
-                  </h3>
+                  <h3 className="text-xl font-bold text-[#005482] mb-4">Rate this Tutor</h3>
                   <RatingForm tutorId={tutorId} />
                 </motion.div>
-              ) : user && availableRatings === 0 ? (
+              ) : user && hasUserRated ? (
                 <div className="mb-8 p-4 bg-yellow-50 rounded-xl text-yellow-700">
-                  You have used all available ratings for this tutor. Make another payment to rate again.
+                  You have already submitted a review for this tutor.
                 </div>
               ) : null}
 
@@ -655,7 +650,7 @@ const RatingForm = ({ tutorId }) => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
   const [rating, setRating] = useState(0);
-  const { availableRatings } = useContext(AuthContext);
+  const [hoveredRating, setHoveredRating] = useState(0);
 
   const onSubmit = async (data) => {
     if (rating === 0) {
@@ -669,28 +664,26 @@ const RatingForm = ({ tutorId }) => {
 
     try {
       const existingRatings = await axiosSecure.get(`/ratings/${tutorId}`);
-      const userRatings = existingRatings.data.filter(r => r.studentEmail === user.email);
-      const payments = await axiosSecure.get(`/payments/${user.email}`);
-      
-      if (userRatings.length >= payments.data.length) {
+      const hasRated = existingRatings.data.some(r => r.studentEmail === user.email);
+
+      if (hasRated) {
         Swal.fire({
           icon: 'error',
-          title: 'Rating Limit Reached',
-          text: 'You can only rate this tutor once per payment.',
+          title: 'Already Rated',
+          text: 'You have already submitted a review for this tutor.',
         });
         return;
       }
 
-      const res = await axiosSecure.post('/ratings', {
+      const ratingData = {
         tutorId,
         studentEmail: user.email,
-        studentName: user.displayName,
         rating: rating,
-        review: data.review,
-        paymentNumber: userRatings.length + 1,
-        createdAt: new Date().toISOString()
-      });
+        comment: data.comment,
+        createdAt: new Date()
+      };
 
+      const res = await axiosSecure.post('/ratings', ratingData);
       if (res.data) {
         queryClient.invalidateQueries(['ratings', tutorId]);
         Swal.fire({
@@ -723,11 +716,13 @@ const RatingForm = ({ tutorId }) => {
               key={value}
               type="button"
               onClick={() => setRating(value)}
+              onMouseEnter={() => setHoveredRating(value)}
+              onMouseLeave={() => setHoveredRating(0)}
               className="focus:outline-none"
             >
               <FaStar
                 className={`text-3xl transition-colors duration-200 ${
-                  value <= rating
+                  value <= (hoveredRating || rating)
                     ? 'text-[#FCBB45]'
                     : 'text-gray-300'
                 }`}
@@ -743,7 +738,7 @@ const RatingForm = ({ tutorId }) => {
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Your Review</label>
         <textarea
-          {...register('review', {
+          {...register('comment', {
             required: 'Please write a review',
             minLength: { value: 10, message: 'Review must be at least 10 characters' }
           })}
@@ -751,8 +746,8 @@ const RatingForm = ({ tutorId }) => {
           rows="4"
           placeholder="Share your experience with this tutor..."
         ></textarea>
-        {errors.review && (
-          <p className="text-sm text-red-500 mt-1">{errors.review.message}</p>
+        {errors.comment && (
+          <p className="text-sm text-red-500 mt-1">{errors.comment.message}</p>
         )}
       </div>
 
