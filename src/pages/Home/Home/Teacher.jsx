@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { FaStar, FaGraduationCap, FaBook, FaGlobe, FaUserClock, FaChalkboardTeacher } from 'react-icons/fa';
+import { FaStar, FaGraduationCap, FaBook, FaGlobe, FaUserClock, FaChalkboardTeacher, FaSearch } from 'react-icons/fa';
 import useAxiosPublic from '../../../hooks/UseAxiosPublic';
 import { useLanguage } from '../../../providers/LanguageProvider';
 
@@ -116,6 +116,7 @@ const Teacher = () => {
   const navigate = useNavigate();
   const { translate } = useLanguage();
   const [showAll, setShowAll] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const { data: tutors = [], isLoading, error } = useQuery({
     queryKey: ['tutors'],
@@ -141,7 +142,12 @@ const Teacher = () => {
     );
   }
 
-  const displayedTutors = showAll ? tutors : tutors.slice(0, 3);
+  // Filter tutors based on search query
+  const filteredTutors = tutors.filter(tutor =>
+    tutor.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const displayedTutors = showAll ? filteredTutors : filteredTutors.slice(0, 3);
 
   return (
     <section className="w-full bg-gray-50 py-10 sm:py-12 md:py-16">
@@ -171,6 +177,24 @@ const Teacher = () => {
               {translate('teacherDesc')}
             </p>
           </div>
+
+          {/* Search Bar */}
+          <div className="max-w-xl mx-auto mt-8 relative group">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search teachers by name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-6 py-4 bg-white rounded-full shadow-md border border-gray-100 pl-14 pr-6 focus:outline-none focus:ring-2 focus:ring-[#70C5D7] focus:border-transparent transition-all duration-300 text-gray-700"
+              />
+              <div className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-[#70C5D7] transition-colors duration-300">
+                <FaSearch size={18} />
+              </div>
+            </div>
+            {/* Animated border effect */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#005482] via-[#70C5D7] to-[#DA3A60] opacity-0 group-hover:opacity-20 transition-opacity duration-300 -z-10 blur-sm"></div>
+          </div>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 xl:gap-8 max-w-[1920px] mx-auto">
@@ -183,7 +207,13 @@ const Teacher = () => {
           ))}
         </div>
 
-        {tutors.length > 3 && (
+        {filteredTutors.length === 0 && (
+          <div className="text-center py-10 text-gray-500">
+            No teachers found matching your search.
+          </div>
+        )}
+
+        {filteredTutors.length > 3 && (
           <div className="text-center mt-8">
             <button
               onClick={() => setShowAll(!showAll)}

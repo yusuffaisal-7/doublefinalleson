@@ -343,6 +343,7 @@ import BecomeTeacherGuide from "../pages/BecomeTeacherGuide/BecomeTeacherGuide";
 import Contact from "../pages/Contact";
 import NotFound from "../pages/NotFound/NotFound";
 import Confirmation from "../pages/Confirmation/Confirmation";
+import ShowMyJobs from "../pages/Dashboard/ShowMyJobs/ShowMyJobs";
 
 // Custom wrapper to restrict routes to admins
 const AdminRoute = ({ children }) => {
@@ -411,6 +412,10 @@ export const router = createBrowserRouter([
       {
         path: "all-jobs",
         element: <ShowAllJobs />,
+      },
+      {
+        path: "myJobs",
+        element: <ShowMyJobs></ShowMyJobs>,
       },
       {
         path: "post-job",

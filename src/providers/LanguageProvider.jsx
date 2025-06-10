@@ -227,6 +227,7 @@ const languages = {
       myBookings: 'My Bookings',
       joinAsTeacher: 'Join as Teacher',
       postJob: 'Post Job',
+      myPosts: 'My Posts',
       availableJobs: 'Available Jobs',
       manageServices: 'Manage Services',
       manageUsers: 'Manage Users',
@@ -243,6 +244,7 @@ const languages = {
       manageStory: 'Manage Story',
       addBlog: 'Add Blog',
       editBlog: 'Edit Blog',
+      confirmation: 'Confirmations',
       menu: 'Menu',
 
       // Find Teacher Guide
@@ -558,6 +560,7 @@ const languages = {
       myBookings: 'Mis Reservas',
       joinAsTeacher: 'Unirse como Profesor',
       postJob: 'Publicar Trabajo',
+      myPosts: 'Mis Publicaciones',
       availableJobs: 'Trabajos Disponib',
       manageServices: 'Gestionar Servicios',
       manageUsers: 'Gestionar Usuarios',
@@ -574,6 +577,7 @@ const languages = {
       manageStory: 'Jere Istwa',
       addBlog: 'Añadir Blog',
       editBlog: 'Editar Blog',
+      confirmation: 'Confirmaciones',
       menu: 'Menú',
 
       // Find Teacher Guide
@@ -921,6 +925,7 @@ const languages = {
       myBookings: 'Rezèvasyon Mwen',
       joinAsTeacher: 'Vin yon Pwofesè',
       postJob: 'Poste Travay',
+      myPosts: 'Piblikasyon Mwen',
       availableJobs: 'Travay Disponib',
       manageServices: 'Jere Sèvis',
       manageUsers: 'Jere Itilizatè',
@@ -937,6 +942,7 @@ const languages = {
       manageStory: 'Jere Istwa',
       addBlog: 'Ajoute Blog',
       editBlog: 'Modifye Blog',
+      confirmation: 'Konfimasyon yo',
       menu: 'Meni',
 
       // Find Teacher Guide
@@ -1323,6 +1329,7 @@ const languages = {
       myBookings: 'Rezèvasyon Mwen',
       joinAsTeacher: 'Vin yon Pwofesè',
       postJob: 'Poste Travay',
+      myPosts: 'Piblikasyon Mwen',
       availableJobs: 'Travay Disponib',
       manageServices: 'Jere Sèvis',
       manageUsers: 'Jere Itilizatè',
@@ -1339,6 +1346,7 @@ const languages = {
       manageStory: 'Jere Istwa',
       addBlog: 'Ajoute Blog',
       editBlog: 'Modifye Blog',
+      confirmation: 'Konfimasyon yo',
       menu: 'Meni',
 
       // Find Teacher Guide
