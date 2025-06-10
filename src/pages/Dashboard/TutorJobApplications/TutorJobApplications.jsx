@@ -2,8 +2,8 @@ import React, { useContext, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { AuthContext } from '../../../providers/AuthProvider';
-import Swal from 'sweetalert2';
 import { motion, AnimatePresence } from 'framer-motion';
+import CustomAlert from '../../../components/CustomAlert';
 import {
   FaGraduationCap,
   FaBook,
@@ -35,19 +35,15 @@ const TutorJobApplications = () => {
     setApplying(jobId);
     try {
       await axiosSecure.post(`/jobs/apply/${jobId}`);
-      Swal.fire({
-        icon: 'success',
-        title: 'Applied to Job',
-        text: 'Your application has been submitted!',
-        timer: 1500,
-        showConfirmButton: false,
-      });
+      CustomAlert.success(
+        'Applied Successfully!',
+        'Your application has been submitted.'
+      );
     } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.response?.data?.message || 'Failed to apply to job.',
-      });
+      CustomAlert.error(
+        'Application Failed',
+        error.response?.data?.message || 'Failed to apply to job.'
+      );
     } finally {
       setApplying(null);
     }
